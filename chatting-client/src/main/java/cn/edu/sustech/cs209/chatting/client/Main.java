@@ -23,7 +23,7 @@ public class Main extends Application {
         stage.getIcons().add(new Image(
             Objects.requireNonNull(getClass().getResource("img.png")).toURI().toString()));
         stage.setScene(new Scene(fxmlLoader.load()));
-        stage.setTitle("Chatting Client By IsLinHehea");
+        stage.setTitle("Chatting Client Developed By IsLinHehea");
         stage.show();
     }
 }
