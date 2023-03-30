@@ -1,6 +1,7 @@
 package cn.edu.sustech.cs209.chatting.client;
 
 import cn.edu.sustech.cs209.chatting.common.Message;
+import java.awt.Image;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,6 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
+import jdk.incubator.vector.VectorOperators.Test;
 
 public class Controller implements Initializable {
 
@@ -28,12 +30,13 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        Dialog<String> dialog = new TextInputDialog();
-        dialog.setTitle("Login");
-        dialog.setHeaderText(null);
-        dialog.setContentText("Username:");
+        Dialog<String> loginDialog = new TextInputDialog();
+        loginDialog.setTitle("Login");
+        loginDialog.setHeaderText("Hello! Enter a username: ");
+        loginDialog.setContentText("Username:");
 
-        Optional<String> input = dialog.showAndWait();
+
+        Optional<String> input = loginDialog.showAndWait();
         if (input.isPresent() && !input.get().isEmpty()) {
             /*
                TODO: Check if there is a user with the same name among the currently logged-in users,
