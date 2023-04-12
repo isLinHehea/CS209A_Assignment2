@@ -3,6 +3,7 @@ package cn.edu.sustech.cs209.chatting.client;
 import java.net.URISyntaxException;
 import java.util.Objects;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -17,12 +18,13 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws IOException, URISyntaxException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("main.fxml"));
-        stage.getIcons().add(new Image(
-            Objects.requireNonNull(getClass().getResource("img.png")).toURI().toString()));
-        stage.setScene(new Scene(fxmlLoader.load()));
-        stage.setTitle("Chatting Client Developed By IsLinHehea");
-        stage.show();
+    public void start(Stage primaryStage) throws IOException, URISyntaxException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/LoginView.fxml"));
+        primaryStage.getIcons().add(new Image(
+            Objects.requireNonNull(getClass().getResource("images/img.png")).toURI().toString()));
+        primaryStage.setScene(new Scene(fxmlLoader.load()));
+        primaryStage.setTitle("SUSTech Chatting Client Developed By IsLinHehea");
+        primaryStage.show();
+        primaryStage.setOnCloseRequest(e -> Platform.exit());
     }
 }

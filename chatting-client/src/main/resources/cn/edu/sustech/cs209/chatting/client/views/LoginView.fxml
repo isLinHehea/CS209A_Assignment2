@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane fx:id="Login" prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.edu.sustech.cs209.chatting.client.LoginController">
+  <children>
+    <ImageView fitHeight="313.0" fitWidth="400.0" layoutX="50.0" layoutY="-31.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+        <Image url="@../images/LOGO.png" />
+      </image>
+    </ImageView>
+
+    <TextField fx:id="UserName" layoutX="125.0" layoutY="190.0" prefHeight="40.0" prefWidth="250.0" promptText="Identification">
+      <font>
+        <Font name="SimSun" size="15.0" />
+      </font>
+      <effect>
+        <InnerShadow blurType="GAUSSIAN" color="#a19f9fa1" height="11.22" radius="4.9725" width="10.67" />
+      </effect>
+      <padding>
+        <Insets left="30.0" />
+      </padding>
+    </TextField>
+    <PasswordField fx:id="Password" layoutX="125.0" layoutY="240.0" prefHeight="40.0" prefWidth="250.0" promptText="Password">
+      <font>
+        <Font name="SimSun" size="15.0" />
+      </font>
+      <effect>
+        <InnerShadow color="#aba7a7a4" height="11.34" radius="5.2524999999999995" width="11.67" />
+      </effect>
+      <padding>
+        <Insets left="30.0" />
+      </padding>
+    </PasswordField>
+    <Button layoutX="125.0" layoutY="292.0" mnemonicParsing="false" onAction="#loginButtonAction" prefHeight="30.0" prefWidth="250.0" text="登入" textFill="WHITE">
+      <effect>
+        <DropShadow color="#000000a1" height="11.0" radius="5.0" width="11.0" />
+      </effect>
+      <font>
+        <Font size="12.0" />
+      </font>
+    </Button>
+    <ImageView fitHeight="23.0" fitWidth="24.0" layoutX="129.0" layoutY="199.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+        <Image url="@../images/user.png" />
+      </image>
+    </ImageView>
+    <ImageView fitHeight="23.0" fitWidth="24.0" layoutX="129.0" layoutY="249.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+        <Image url="@../images/password.png" />
+      </image>
+    </ImageView>
+    <MenuButton mnemonicParsing="false" text="Port">
+      <items>
+        <MenuItem mnemonicParsing="false" text="Action 1" />
+        <MenuItem mnemonicParsing="false" text="Action 2" />
+      </items>
+      <font>
+        <Font size="12.0" />
+      </font>
+    </MenuButton>
+  </children>
+</Pane>
