@@ -52,6 +52,8 @@ public class LoginController implements Initializable {
         String username = UserName.getText();
         String password = Password.getText();
 
+
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/ChatView.fxml"));
         this.scene = new Scene(fxmlLoader.load());
         ChatController con = fxmlLoader.getController();
@@ -63,17 +65,14 @@ public class LoginController implements Initializable {
     public void showScene() throws IOException {
         Platform.runLater(() -> {
             Stage stage = (Stage) UserName.getScene().getWindow();
-            stage.setResizable(true);
-            stage.setWidth(1040);
-            stage.setHeight(620);
-
             stage.setOnCloseRequest((WindowEvent e) -> {
                 Platform.exit();
                 System.exit(0);
             });
             stage.setScene(this.scene);
-            stage.setMinWidth(800);
-            stage.setMinHeight(300);
+            stage.setMinWidth(700);
+            stage.setMinHeight(500);
+            stage.setResizable(true);
             stage.centerOnScreen();
         });
     }
