@@ -27,24 +27,6 @@ public class ChatController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        Dialog<String> loginDialog = new TextInputDialog();
-        loginDialog.setTitle("Login");
-        loginDialog.setHeaderText("Hello! Enter a username: ");
-        loginDialog.setContentText("Username:");
-
-        Optional<String> input = loginDialog.showAndWait();
-        if (input.isPresent() && !input.get().isEmpty()) {
-            /*
-               TODO: Check if there is a user with the same name among the currently logged-in users,
-                     if so, ask the user to change the username
-             */
-            username = input.get();
-        } else {
-            System.out.println("Invalid username " + input + ", exiting");
-            Platform.exit();
-        }
-
         chatContentList.setCellFactory(new MessageCellFactory());
     }
 

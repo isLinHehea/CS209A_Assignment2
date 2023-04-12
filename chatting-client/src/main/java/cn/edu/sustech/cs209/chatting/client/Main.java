@@ -24,6 +24,7 @@ public class Main extends Application {
             Objects.requireNonNull(getClass().getResource("images/img.png")).toURI().toString()));
         primaryStage.setScene(new Scene(fxmlLoader.load()));
         primaryStage.setTitle("SUSTech Chatting Client Developed By IsLinHehea");
+        primaryStage.setResizable(false);
         primaryStage.show();
         primaryStage.setOnCloseRequest(e -> Platform.exit());
     }
