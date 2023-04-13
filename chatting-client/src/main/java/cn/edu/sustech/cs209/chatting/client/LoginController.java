@@ -1,5 +1,6 @@
 package cn.edu.sustech.cs209.chatting.client;
 
+import cn.edu.sustech.cs209.chatting.common.User;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
@@ -48,16 +49,16 @@ public class LoginController implements Initializable {
     }
 
     public void loginButtonAction() throws IOException {
-        System.out.println("Login Successfully!");
         String username = UserName.getText();
         String password = Password.getText();
-
-
+        User user = new User(username, password);
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/ChatView.fxml"));
         this.scene = new Scene(fxmlLoader.load());
-        ChatController con = fxmlLoader.getController();
-        Listener listener = new Listener("losthost", 1207, username, con);
+
+        ChatController chatController = fxmlLoader.getController();
+
+        Listener listener = new Listener("localhost", 1207, user, chatController);
         Thread x = new Thread(listener);
         x.start();
     }
@@ -97,7 +98,7 @@ public class LoginController implements Initializable {
         int speedOfSqaure = rand.nextInt(10) + 5;
         int startXPoint = rand.nextInt(500);
         int startYPoint = rand.nextInt(350);
-        int direction = rand.nextInt(5) + 1;
+        int direction = rand.nextInt(6) + 1;
 
         KeyValue moveXAxis = null;
         KeyValue moveYAxis = null;

@@ -10,18 +10,17 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Server {
 
+    private List<User> usersList = new ArrayList<>();
     private static final int PORT = 1207;
 
-    static Logger logger = LoggerFactory.getLogger(Server.class);
-
-
     public static void main(String[] args) throws IOException {
-        logger.info("The Chatting Server Is Running.");
         try (ServerSocket listener = new ServerSocket(PORT)) {
             while (true) {
                 new Handler(listener.accept()).start();
@@ -34,7 +33,6 @@ public class Server {
     private static class Handler extends Thread {
 
         private final Socket socket;
-        private final Logger logger = LoggerFactory.getLogger(Handler.class);
         private ObjectInputStream input;
         private OutputStream os;
         private ObjectOutputStream output;
@@ -45,15 +43,15 @@ public class Server {
         }
 
         public void run() {
-            logger.info("Attempting To Connect A User...");
             try {
                 is = socket.getInputStream();
                 input = new ObjectInputStream(is);
                 os = socket.getOutputStream();
                 output = new ObjectOutputStream(os);
 
-
+                User user = (User) input.readObject();
             } catch (SocketException socketException) {
+
             } catch (Exception e) {
             }
         }

@@ -4,10 +4,13 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-    String picture;
-//    Status status;
+    private String name;
+    private String password;
 
-    String name;
+    public User(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
 
     public String getName() {
         return name;
@@ -17,19 +20,8 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public String getPicture() {
-        return picture;
+    @Override
+    public String toString() {
+        return name;
     }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
-
-//    public Status getStatus() {
-//        return status;
-//    }
-//
-//    public void setStatus(Status status) {
-//        this.status = status;
-//    }
 }

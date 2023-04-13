@@ -1,6 +1,7 @@
 package cn.edu.sustech.cs209.chatting.client;
 
 import cn.edu.sustech.cs209.chatting.common.Message;
+import cn.edu.sustech.cs209.chatting.common.User;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,6 +22,10 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ChatController implements Initializable {
 
     @FXML
+    TextArea inputArea;
+    @FXML
+    ListView<User> chatUserList;
+    @FXML
     ListView<Message> chatContentList;
 
     String username;
@@ -40,7 +45,7 @@ public class ChatController implements Initializable {
         // FIXME: get the user list from server, the current user's name should be filtered out
         userSel.getItems().addAll("Item 1", "Item 2", "Item 3");
 
-        Button okBtn = new Button("OK");
+        Button okBtn = new Button("Create");
         okBtn.setOnAction(e -> {
             user.set(userSel.getSelectionModel().getSelectedItem());
             stage.close();
