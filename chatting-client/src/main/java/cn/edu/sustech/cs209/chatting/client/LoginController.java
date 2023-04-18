@@ -1,5 +1,8 @@
 package cn.edu.sustech.cs209.chatting.client;
 
+import static cn.edu.sustech.cs209.chatting.common.Status.AWAY;
+import static cn.edu.sustech.cs209.chatting.common.Status.ONLINE;
+
 import cn.edu.sustech.cs209.chatting.common.User;
 import java.io.IOException;
 import java.net.URL;
@@ -51,7 +54,7 @@ public class LoginController implements Initializable {
     public void loginButtonAction() throws IOException {
         String username = UserName.getText();
         String password = Password.getText();
-        User user = new User(username, password);
+        User user = new User(username, password, ONLINE);
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/ChatView.fxml"));
         this.scene = new Scene(fxmlLoader.load());

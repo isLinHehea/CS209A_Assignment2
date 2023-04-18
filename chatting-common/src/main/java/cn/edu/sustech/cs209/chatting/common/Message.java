@@ -1,31 +1,28 @@
 package cn.edu.sustech.cs209.chatting.common;
 
-public class Message {
+import java.io.Serializable;
 
-    private Long timestamp;
+public class Message implements Serializable {
 
-    private String sentBy;
+    private static final long serialVersionUID = -7755162995496909499L;
 
-    private String sendTo;
+    private final User sentBy;
 
-    private String data;
+    private final User sendTo;
 
-    public Message(Long timestamp, String sentBy, String sendTo, String data) {
-        this.timestamp = timestamp;
+    private final String data;
+
+    public Message(User sentBy, User sendTo, String data) {
         this.sentBy = sentBy;
         this.sendTo = sendTo;
         this.data = data;
     }
 
-    public Long getTimestamp() {
-        return timestamp;
-    }
-
-    public String getSentBy() {
+    public User getSentBy() {
         return sentBy;
     }
 
-    public String getSendTo() {
+    public User getSendTo() {
         return sendTo;
     }
 
