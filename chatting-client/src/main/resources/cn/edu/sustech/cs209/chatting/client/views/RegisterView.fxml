@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.paint.*?>
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<Pane fx:id="Login" prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8"
+<Pane fx:id="Register" prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8"
   xmlns:fx="http://javafx.com/fxml/1"
   fx:controller="cn.edu.sustech.cs209.chatting.client.LoginController">
   <children>
@@ -20,8 +18,8 @@
       </image>
     </ImageView>
 
-    <TextField fx:id="UserName" layoutX="125.0" layoutY="190.0" prefHeight="40.0" prefWidth="250.0"
-      promptText="Identification">
+    <TextField fx:id="RegisterUserName" layoutX="125.0" layoutY="190.0" prefHeight="40.0"
+      prefWidth="250.0" promptText="Identification">
       <font>
         <Font name="SimSun" size="15.0"/>
       </font>
@@ -33,7 +31,7 @@
         <Insets left="30.0"/>
       </padding>
     </TextField>
-    <PasswordField fx:id="Password" layoutX="125.0" layoutY="240.0" prefHeight="40.0"
+    <PasswordField fx:id="RegisterPassword" layoutX="125.0" layoutY="240.0" prefHeight="40.0"
       prefWidth="250.0" promptText="Password">
       <font>
         <Font name="SimSun" size="15.0"/>
@@ -45,8 +43,8 @@
         <Insets left="30.0"/>
       </padding>
     </PasswordField>
-    <Button layoutX="125.0" layoutY="292.0" mnemonicParsing="false" onAction="#loginButtonAction"
-      prefHeight="30.0" prefWidth="250.0" style="-fx-background-color: #87CEFA" text="登录"
+    <Button layoutX="125.0" layoutY="292.0" mnemonicParsing="false" onAction="#registerButtonAction"
+      prefHeight="30.0" prefWidth="250.0" style="-fx-background-color: #87CEFA" text="注册"
       textFill="WHITE">
       <effect>
         <DropShadow color="#000000a1" height="11.0" radius="5.0" width="11.0"/>
@@ -68,8 +66,8 @@
       </image>
     </ImageView>
     <Button layoutY="324.0" mnemonicParsing="false"
-      onAction="#showRegisterView"
-      style="-fx-background-color: transparent; -fx-border-color: transparent;" text="注册账号"
+      onAction="#returnLoginButtonAction"
+      style="-fx-background-color: transparent; -fx-border-color: transparent;" text="已有账号"
       textAlignment="CENTER" textFill="#838b8b">
       <font>
         <Font size="12.0"/>

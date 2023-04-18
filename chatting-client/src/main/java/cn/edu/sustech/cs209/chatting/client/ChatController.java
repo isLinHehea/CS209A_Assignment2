@@ -18,6 +18,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -128,6 +129,13 @@ public class ChatController implements Initializable {
                 "You have successfully sent a message to " + msg.getSendTo().getName() + ": "
                     + msg.getData());
         }
+    }
+
+    public void handleUserListClick(MouseEvent event) {
+        currentChatUser = chatUserList.getSelectionModel().getSelectedItem();
+        ObservableList<Message> chattingRecords = FXCollections.observableArrayList(
+            chatContent.get(currentChatUser));
+        chatContentList.setItems(chattingRecords);
     }
 
     public class UserCellFactory implements Callback<ListView<User>, ListCell<User>> {

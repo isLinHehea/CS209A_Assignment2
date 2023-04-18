@@ -19,6 +19,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.6.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>${javafx.version}</version>
@@ -45,6 +51,7 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.5.6</version>
         </dependency>
+
     </dependencies>
 
     <build>

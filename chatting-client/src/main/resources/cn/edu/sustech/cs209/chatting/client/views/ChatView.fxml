@@ -35,7 +35,7 @@
     </MenuBar>
     <SplitPane dividerPositions="0.25" focusTraversable="true" VBox.vgrow="ALWAYS">
       <items>
-        <ListView fx:id="chatUserList" prefHeight="200.0" prefWidth="200.0"/>
+        <ListView fx:id="chatUserList" prefHeight="200.0" prefWidth="200.0" onMouseClicked="#handleUserListClick" />
         <SplitPane dividerPositions="0.7294938917975567" orientation="VERTICAL" prefHeight="200.0"
           prefWidth="160.0">
           <items>

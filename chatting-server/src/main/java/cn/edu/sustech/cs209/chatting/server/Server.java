@@ -14,15 +14,12 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Server {
 
-    private static List<User> onlineUserList = new ArrayList<>();
+    private static final List<User> onlineUserList = new ArrayList<>();
     private static final int PORT = 1207;
 
     private static HashSet<ObjectOutputStream> writers = new HashSet<>();
@@ -31,6 +28,11 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
         logger.info("The SUSTech Chatting Server is running.");
+
+        onlineUserList.add(new User("LJJ", "123456789", Status.ONLINE));
+        onlineUserList.add(new User("DJL", "123456789", Status.ONLINE));
+        onlineUserList.add(new User("YK", "123456789", Status.ONLINE));
+        onlineUserList.add(new User("Hans", "123456789", Status.ONLINE));
 
         try (ServerSocket listener = new ServerSocket(PORT)) {
             while (true) {
@@ -70,8 +72,8 @@ public class Server {
                 write(onlineUserList);
 
                 logger.info(
-                    "Now There Is A User That Has Connected To The Server: " + user.getName() + "\n"
-                        + "The Whole Number Of Online Users: "
+                    "There Is A User That Has Connected To The Server: " + user.getName() + "\n"
+                        + "--The Whole Number Of Online Users: "
                         + onlineUserList.size());
 
                 while (socket.isConnected()) {
@@ -112,10 +114,10 @@ public class Server {
             }
         }
 
-        public void ClientDownPrompt() {
+        private void ClientDownPrompt() {
             logger.info(
-                "Now There Is A User That Has Disconnected To The Server: " + user.getName() + "\n"
-                    + "The Whole Number Of Online Users: "
+                "There Is A User That Has Disconnected To The Server: " + user.getName() + "\n"
+                    + "--The Whole Number Of Online Users: "
                     + onlineUserList.size());
         }
 
@@ -127,6 +129,4 @@ public class Server {
             }
         }
     }
-
-
 }
