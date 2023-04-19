@@ -137,7 +137,6 @@ public class LoginController implements Initializable {
         }
     }
 
-    //
     public void returnLoginButtonAction() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/LoginView.fxml"));
         Pane = Login;

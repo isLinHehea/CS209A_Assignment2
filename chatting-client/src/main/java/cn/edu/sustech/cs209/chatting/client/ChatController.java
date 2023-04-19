@@ -100,6 +100,7 @@ public class ChatController implements Initializable {
         ObservableList<Message> chattingRecords = FXCollections.observableArrayList(
             chatContent.get(currentChatUser));
         chatContentList.setItems(chattingRecords);
+        chatContentList.refresh();
 
         // TODO: if the current user already chatted with the selected user, just open the chat with that user
         // TODO: otherwise, create a new chat item in the left panel, the title should be the selected user's name
@@ -136,6 +137,7 @@ public class ChatController implements Initializable {
         ObservableList<Message> chattingRecords = FXCollections.observableArrayList(
             chatContent.get(currentChatUser));
         chatContentList.setItems(chattingRecords);
+        chatContentList.refresh();
     }
 
     public class UserCellFactory implements Callback<ListView<User>, ListCell<User>> {
@@ -244,6 +246,7 @@ public class ChatController implements Initializable {
         ObservableList<Message> chattingRecords = FXCollections.observableArrayList(
             chatContent.get(msg.getSendTo()));
         chatContentList.setItems(chattingRecords);
+        chatContentList.refresh();
     }
 
     public void addToChatContentListForTo(Message msg) {
@@ -260,6 +263,7 @@ public class ChatController implements Initializable {
         ObservableList<Message> chattingRecords = FXCollections.observableArrayList(
             chatContent.get(msg.getSentBy()));
         chatContentList.setItems(chattingRecords);
+        chatContentList.refresh();
     }
 
     public void ServerDownPrompt() {

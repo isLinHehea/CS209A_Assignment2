@@ -29,11 +29,6 @@ public class Server {
     public static void main(String[] args) throws IOException {
         logger.info("The SUSTech Chatting Server is running.");
 
-        onlineUserList.add(new User("LJJ", "123456789", Status.ONLINE));
-        onlineUserList.add(new User("DJL", "123456789", Status.ONLINE));
-        onlineUserList.add(new User("YK", "123456789", Status.ONLINE));
-        onlineUserList.add(new User("Hans", "123456789", Status.ONLINE));
-
         try (ServerSocket listener = new ServerSocket(PORT)) {
             while (true) {
                 new Handler(listener.accept()).start();
