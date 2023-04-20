@@ -46,7 +46,7 @@
       </padding>
     </PasswordField>
     <Button layoutX="125.0" layoutY="292.0" mnemonicParsing="false" onAction="#loginButtonAction"
-      prefHeight="30.0" prefWidth="250.0" style="-fx-background-color: #87CEFA" text="登录"
+      prefHeight="30.0" prefWidth="250.0" style="-fx-background-color: #fee1b8" text="登录"
       textFill="WHITE">
       <effect>
         <DropShadow color="#000000a1" height="11.0" radius="5.0" width="11.0"/>

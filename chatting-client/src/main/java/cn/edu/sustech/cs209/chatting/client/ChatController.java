@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -21,6 +22,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -78,6 +80,18 @@ public class ChatController implements Initializable {
             User selected = userToBeSelected.getSelectionModel().getSelectedItem();
             if (selected != null) {
                 userSelected.set(selected);
+                currentChatUser = userSelected.get();
+                if (!chatUserList.getItems().contains(currentChatUser)) {
+                    chatUserList.getItems().add(currentChatUser);
+                    ArrayList<Message> chattingList = new ArrayList<>();
+                    chatContent.put(currentChatUser, chattingList);
+                }
+                ObservableList<Message> chattingRecords = FXCollections.observableArrayList(
+                    chatContent.get(currentChatUser));
+                chatContentList.setItems(chattingRecords);
+                logger.info("The current chat user is: " + currentChatUser.getName());
+            } else {
+                return;
             }
             stage.close();
         });
@@ -90,20 +104,6 @@ public class ChatController implements Initializable {
         box.getChildren().addAll(select, userToBeSelected, createBtn);
         stage.setScene(new Scene(box));
         stage.showAndWait();
-
-        currentChatUser = userSelected.get();
-        chatUserList.getItems().add(currentChatUser);
-
-        ArrayList<Message> chattingList = new ArrayList<>();
-        chatContent.put(currentChatUser, chattingList);
-
-        ObservableList<Message> chattingRecords = FXCollections.observableArrayList(
-            chatContent.get(currentChatUser));
-        chatContentList.setItems(chattingRecords);
-        chatContentList.refresh();
-
-        // TODO: if the current user already chatted with the selected user, just open the chat with that user
-        // TODO: otherwise, create a new chat item in the left panel, the title should be the selected user's name
     }
 
     /**
@@ -121,23 +121,37 @@ public class ChatController implements Initializable {
 
     @FXML
     public void sendMessage() throws IOException {
-        String data = messageArea.getText();
-        Message msg = new Message(user, currentChatUser, data);
-        if (!messageArea.getText().isEmpty()) {
-            Listener.send(msg);
-            messageArea.clear();
-            logger.info(
-                "You have successfully sent a message to " + msg.getSendTo().getName() + ": "
-                    + msg.getData());
+        if (currentChatUser != null && messageArea.getText() != null) {
+            String data = messageArea.getText();
+            Message msg = new Message(user, currentChatUser, data);
+            if (!messageArea.getText().isEmpty()) {
+                Listener.send(msg);
+                messageArea.clear();
+                logger.info(
+                    "You have successfully sent a message to " + msg.getSendTo().getName() + ": "
+                        + msg.getData());
+            }
         }
     }
 
-    public void handleUserListClick(MouseEvent event) {
+    public void handleUserListClick() {
         currentChatUser = chatUserList.getSelectionModel().getSelectedItem();
         ObservableList<Message> chattingRecords = FXCollections.observableArrayList(
             chatContent.get(currentChatUser));
+        logger.info(Integer.toString(chatContent.get(currentChatUser).size()));
         chatContentList.setItems(chattingRecords);
-        chatContentList.refresh();
+        logger.info("The current chat user is: " + currentChatUser.getName());
+    }
+
+    public void showOnlineUserList() {
+        ObservableList<User> users = FXCollections.observableArrayList(onlineUserList);
+        ListView<User> listView = new ListView<>(users);
+        listView.setCellFactory(new UserCellFactory());
+        VBox root = new VBox(listView);
+        root.setPadding(new Insets(10));
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     public class UserCellFactory implements Callback<ListView<User>, ListCell<User>> {
@@ -155,7 +169,7 @@ public class ChatController implements Initializable {
                 protected void updateItem(User user, boolean empty) {
                     super.updateItem(user, empty);
 
-                    if (empty || user == null) {
+                    if (empty || Objects.isNull(user)) {
                         setText(null);
                         setGraphic(null);
                         return;
@@ -202,51 +216,56 @@ public class ChatController implements Initializable {
                 private final Label nameLabel = new Label();
                 private final Label msgLabel = new Label();
 
+                {
+                    nameLabel.setMaxWidth(Double.MAX_VALUE);
+                    nameLabel.setWrapText(true);
+                    nameLabel.setStyle("-fx-font-weight: bold;");
+
+                    msgLabel.setWrapText(true);
+                    msgLabel.setStyle(
+                        "-fx-background-color: #f4f4f4; -fx-background-radius: 10px; -fx-padding: 10px;");
+                }
+
                 @Override
                 protected void updateItem(Message msg, boolean empty) {
-                    if (empty || msg == null) {
+                    super.updateItem(msg, empty);
+                    if (empty || Objects.isNull(msg)) {
                         setText(null);
                         setGraphic(null);
-                        return;
-                    }
-                    Platform.runLater(() -> {
-                        nameLabel.setText(msg.getSentBy().getName());
-                        nameLabel.setMaxWidth(Double.MAX_VALUE);
-                        nameLabel.setWrapText(true);
-                        nameLabel.setStyle("-fx-font-weight: bold;");
+                    } else {
+                        Platform.runLater(() -> {
+                            nameLabel.setText(msg.getSentBy().getName());
+                            msgLabel.setText(msg.getData());
 
-                        msgLabel.setText(msg.getData());
-                        msgLabel.setWrapText(true);
-                        msgLabel.setStyle(
-                            "-fx-background-color: #f4f4f4; -fx-background-radius: 10px; -fx-padding: 10px;");
+                            if (!wrapper.getChildren().contains(nameLabel) && !wrapper.getChildren()
+                                .contains(msgLabel)) {
+                                wrapper.getChildren().clear();
 
-                        if (!wrapper.getChildren().contains(nameLabel) && !wrapper.getChildren()
-                            .contains(msgLabel)) {
-                            wrapper.getChildren().clear();
+                                if (user.equals(msg.getSentBy())) {
+                                    wrapper.setAlignment(Pos.TOP_RIGHT);
+                                    wrapper.getChildren().addAll(msgLabel, nameLabel);
+                                } else {
+                                    wrapper.setAlignment(Pos.TOP_LEFT);
+                                    wrapper.getChildren().addAll(nameLabel, msgLabel);
+                                }
 
-                            if (user.equals(msg.getSentBy())) {
-                                wrapper.setAlignment(Pos.TOP_RIGHT);
-                                wrapper.getChildren().addAll(msgLabel, nameLabel);
-                            } else {
-                                wrapper.setAlignment(Pos.TOP_LEFT);
-                                wrapper.getChildren().addAll(nameLabel, msgLabel);
+                                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                                setGraphic(wrapper);
                             }
-
-                            setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                            setGraphic(wrapper);
-                        }
-                    });
+                        });
+                    }
                 }
             };
         }
     }
 
     public void addToChatContentListForBy(Message msg) {
-        chatContent.get(msg.getSendTo()).add(msg);
-        ObservableList<Message> chattingRecords = FXCollections.observableArrayList(
-            chatContent.get(msg.getSendTo()));
-        chatContentList.setItems(chattingRecords);
-        chatContentList.refresh();
+        if (currentChatUser.equals(msg.getSendTo())) {
+            chatContent.get(currentChatUser).add(msg);
+            ObservableList<Message> chattingRecords = FXCollections.observableArrayList(
+                chatContent.get(currentChatUser));
+            chatContentList.setItems(chattingRecords);
+        }
     }
 
     public void addToChatContentListForTo(Message msg) {
@@ -263,7 +282,6 @@ public class ChatController implements Initializable {
         ObservableList<Message> chattingRecords = FXCollections.observableArrayList(
             chatContent.get(msg.getSentBy()));
         chatContentList.setItems(chattingRecords);
-        chatContentList.refresh();
     }
 
     public void ServerDownPrompt() {
