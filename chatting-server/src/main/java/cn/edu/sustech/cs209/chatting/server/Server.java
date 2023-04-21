@@ -22,18 +22,15 @@ public class Server {
     private static final List<User> onlineUserList = new ArrayList<>();
     private static final int PORT = 1207;
 
-    private static HashSet<ObjectOutputStream> writers = new HashSet<>();
+    private static final HashSet<ObjectOutputStream> writers = new HashSet<>();
 
     static Logger logger = LoggerFactory.getLogger(Server.class);
 
     public static void main(String[] args) throws IOException {
         logger.info("The SUSTech Chatting Server is running.");
 
-        onlineUserList.add(new User("HANS", "1234567", Status.ONLINE));
-        onlineUserList.add(new User("A", "1234567", Status.ONLINE));
-        onlineUserList.add(new User("B", "1234567", Status.ONLINE));
-        onlineUserList.add(new User("C", "1234567", Status.ONLINE));
-        onlineUserList.add(new User("D", "1234567", Status.ONLINE));
+        onlineUserList.add(new User("TESTA", "1234567", Status.ONLINE));
+        onlineUserList.add(new User("TESTB", "1234567", Status.ONLINE));
 
         try (ServerSocket listener = new ServerSocket(PORT)) {
             while (true) {

@@ -45,7 +45,12 @@ public class LoginController implements Initializable {
     public TextField RegisterUserName;
     @FXML
     public PasswordField RegisterPassword;
+    @FXML
     public Pane Register;
+    @FXML
+    public TextField HostName;
+    @FXML
+    public TextField Port;
     @FXML
     private Pane Login;
     @FXML
@@ -94,7 +99,8 @@ public class LoginController implements Initializable {
 
             ChatController chatController = fxmlLoader.getController();
 
-            Listener listener = new Listener("localhost", 1207, user, chatController);
+            Listener listener = new Listener(HostName.getText(), Integer.parseInt(Port.getText()),
+                user, chatController);
             Thread x = new Thread(listener);
             x.start();
         }

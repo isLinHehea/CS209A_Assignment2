@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
   prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8"
@@ -13,12 +17,6 @@
     <MenuBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="25.0" prefWidth="900.0" VBox.vgrow="NEVER">
       <menus>
-        <Menu mnemonicParsing="false" text="Function">
-          <items>
-            <MenuItem mnemonicParsing="false" onAction="#showOnlineUserList"
-              text="Online User List"/>
-          </items>
-        </Menu>
         <Menu mnemonicParsing="false" text="Chat">
           <items>
             <MenuItem mnemonicParsing="false" onAction="#createPrivateChat"
@@ -32,27 +30,64 @@
       maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="575.0"
       prefWidth="900.0" VBox.vgrow="ALWAYS">
       <items>
-        <ListView fx:id="chatUserList" maxHeight="-Infinity" maxWidth="-Infinity"
-          minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleUserListClick"
-          prefHeight="575.0" prefWidth="222.0"/>
+        <SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity"
+          minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="575.0"
+          prefWidth="222.0">
+          <items>
+            <ListView fx:id="chatUserList" maxHeight="-Infinity" maxWidth="-Infinity"
+              minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleUserListClick"
+              prefHeight="350.0" prefWidth="222.0"/>
+            <ListView fx:id="onlineUserList" maxHeight="-Infinity" maxWidth="-Infinity"
+              minHeight="-Infinity"
+              minWidth="-Infinity" prefHeight="225.0" prefWidth="222.0"/>
+          </items>
+        </SplitPane>
         <SplitPane dividerPositions="0.7294938917975567" maxHeight="-Infinity" maxWidth="-Infinity"
           minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="575.0"
           prefWidth="678.0">
           <items>
             <ListView fx:id="chatContentList" maxHeight="-Infinity" maxWidth="-Infinity "
-              minHeight="-Infinity" minWidth="-Infinity" prefHeight="415.0" prefWidth="678.0"
-              orientation="vertical"/>
+              minHeight="-Infinity" minWidth="-Infinity" orientation="vertical" prefHeight="415.0"
+              prefWidth="678.0"/>
             <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
               minWidth="-Infinity" prefHeight="160.0" prefWidth="678.0">
               <children>
-                <TextArea fx:id="messageArea" maxHeight="-Infinity" maxWidth="-Infinity"
-                  minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="678.0"/>
+                <TextArea fx:id="messageArea" layoutY="25.0" maxHeight="-Infinity"
+                  maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="135.0"
+                  prefWidth="678.0"/>
                 <Button layoutX="535.0" layoutY="108.0" maxHeight="1.7976931348623157E308"
                   mnemonicParsing="false" onAction="#sendMessage" prefHeight="30.0" prefWidth="99.0"
                   text="Send">
                   <font>
                     <Font name="System Bold" size="14.0"/>
                   </font>
+                </Button>
+
+                <Button layoutX="29.0" maxHeight="-Infinity" maxWidth="-Infinity"
+                  minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                  prefHeight="25.0" prefWidth="25.0"
+                  style="-fx-border-color: transparent;-fx-border-width: 0;-fx-background-radius: 0;-fx-background-color: transparent;">
+                  <graphic>
+                    <ImageView fitHeight="25.0" fitWidth="25.0" mouseTransparent="true"
+                      pickOnBounds="true" preserveRatio="true">
+                      <image>
+                        <Image smooth="false" url="@../images/emoji.png"/>
+                      </image>
+                    </ImageView>
+                  </graphic>
+                </Button>
+                <Button layoutX="72.0" maxHeight="-Infinity" maxWidth="-Infinity"
+                  minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                  prefHeight="25.0" prefWidth="25.0"
+                  style="-fx-border-color: transparent;-fx-border-width: 0;-fx-background-radius: 0;-fx-background-color: transparent;">
+                  <graphic>
+                    <ImageView fitHeight="25.0" fitWidth="25.0" mouseTransparent="true"
+                      pickOnBounds="true" preserveRatio="true">
+                      <image>
+                        <Image smooth="false" url="@../images/file.png"/>
+                      </image>
+                    </ImageView>
+                  </graphic>
                 </Button>
               </children>
             </Pane>

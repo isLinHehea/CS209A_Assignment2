@@ -7,18 +7,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -28,7 +32,9 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
 import java.net.URL;
@@ -36,6 +42,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
+import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,9 +54,9 @@ public class ChatController implements Initializable {
     @FXML
     ListView<User> chatUserList;
     @FXML
+    ListView<User> onlineUserList;
+    @FXML
     ListView<Message> chatContentList;
-
-    List<User> onlineUserList = new ArrayList<>();
 
     User currentChatUser;
 
@@ -72,7 +79,7 @@ public class ChatController implements Initializable {
         Stage stage = new Stage();
         ComboBox<User> userToBeSelected = new ComboBox<>();
 
-        userToBeSelected.getItems().addAll(onlineUserList);
+        userToBeSelected.getItems().addAll(onlineUserList.getItems());
         userToBeSelected.getItems().remove(user);
 
         Button createBtn = new Button("Create");
@@ -95,13 +102,10 @@ public class ChatController implements Initializable {
             }
             stage.close();
         });
-        Label select = new Label("Select");
-        select.setFont(new Font("Arial", 17));
 
-        HBox box = new HBox(10);
+        HBox box = new HBox(10, userToBeSelected, createBtn);
         box.setAlignment(Pos.CENTER);
         box.setPadding(new Insets(20, 20, 20, 20));
-        box.getChildren().addAll(select, userToBeSelected, createBtn);
         stage.setScene(new Scene(box));
         stage.showAndWait();
     }
@@ -117,6 +121,37 @@ public class ChatController implements Initializable {
      */
     @FXML
     public void createGroupChat() {
+        Stage stage = new Stage();
+
+        ListView<User> listView = new ListView<>();
+        listView.setItems(onlineUserList.getItems());
+        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        Button createBtn = new Button("Create");
+        createBtn.setOnAction(e -> {
+            ObservableList<User> selectedItems = listView.getSelectionModel().getSelectedItems();
+            if (!selectedItems.isEmpty() && selectedItems.size() != 1) {
+                try {
+                    Stage GroupChatStage = new Stage();
+                    FXMLLoader fxmlLoader = new FXMLLoader(
+                        getClass().getResource("views/GroupChatView.fxml"));
+                    GroupChatStage.setScene(new Scene(fxmlLoader.load()));
+                    GroupChatStage.setResizable(false);
+                    GroupChatStage.show();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            } else {
+                return;
+            }
+            stage.close();
+        });
+
+        VBox box = new VBox(10, listView, createBtn);
+        box.setAlignment(Pos.CENTER);
+        box.setPadding(new Insets(20, 20, 10, 20));
+        stage.setScene(new Scene(box));
+        stage.showAndWait();
     }
 
     @FXML
@@ -135,35 +170,21 @@ public class ChatController implements Initializable {
     }
 
     public void handleUserListClick() {
-        currentChatUser = chatUserList.getSelectionModel().getSelectedItem();
-        ObservableList<Message> chattingRecords = FXCollections.observableArrayList(
-            chatContent.get(currentChatUser));
-        logger.info(Integer.toString(chatContent.get(currentChatUser).size()));
-        chatContentList.setItems(chattingRecords);
-        logger.info("The current chat user is: " + currentChatUser.getName());
+        if (chatUserList.getSelectionModel().getSelectedItem() != null) {
+            currentChatUser = chatUserList.getSelectionModel().getSelectedItem();
+            ObservableList<Message> chattingRecords = FXCollections.observableArrayList(
+                chatContent.get(currentChatUser));
+            logger.info(Integer.toString(chatContent.get(currentChatUser).size()));
+            chatContentList.setItems(chattingRecords);
+            logger.info("The current chat user is: " + currentChatUser.getName());
+        }
     }
 
-    public void showOnlineUserList() {
-        ObservableList<User> users = FXCollections.observableArrayList(onlineUserList);
-        ListView<User> listView = new ListView<>(users);
-        listView.setCellFactory(new UserCellFactory());
-        VBox root = new VBox(listView);
-        root.setPadding(new Insets(10));
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
-
-    public class UserCellFactory implements Callback<ListView<User>, ListCell<User>> {
+    public static class UserCellFactory implements Callback<ListView<User>, ListCell<User>> {
 
         @Override
         public ListCell<User> call(ListView<User> param) {
             return new ListCell<User>() {
-                private HBox hbox = new HBox();
-                private Text nameText = new Text();
-                private Text statusText = new Text();
-                private Circle statusCircle;
-
 
                 @Override
                 protected void updateItem(User user, boolean empty) {
@@ -174,32 +195,29 @@ public class ChatController implements Initializable {
                         setGraphic(null);
                         return;
                     }
+                    HBox wrapper = new HBox();
+                    Text nameText = new Text();
+                    Text statusText = new Text();
+                    Circle statusCircle = new Circle(7);
 
-                    Platform.runLater(() -> {
+                    {
                         nameText.setFont(Font.font("Arial", 16));
-
                         statusText.setFont(Font.font("Arial", 12));
                         statusText.setFill(Color.GRAY);
+                    }
 
-                        statusCircle = new Circle(8);
+                    nameText.setText(user.getName());
+                    statusText.setText(user.getStatus().toString());
+                    statusCircle.setFill(Paint.valueOf(user.getStatus().getColor()));
+                    wrapper.setAlignment(Pos.CENTER_LEFT);
+                    wrapper.setMinHeight(Region.USE_PREF_SIZE);
+                    wrapper.setMaxHeight(Region.USE_PREF_SIZE);
+                    wrapper.getChildren().addAll(statusCircle, nameText, statusText);
+                    wrapper.setSpacing(12);
 
-                        if (!hbox.getChildren().contains(nameText) && !hbox.getChildren()
-                            .contains(statusText)) {
-                            hbox.getChildren().clear();
-
-                            hbox = new HBox(10, statusCircle, nameText, statusText);
-                            hbox.setAlignment(Pos.CENTER_LEFT);
-                            hbox.setMinHeight(Region.USE_PREF_SIZE);
-                            hbox.setMaxHeight(Region.USE_PREF_SIZE);
-                            nameText.setText(user.getName());
-                            statusText.setText(user.getStatus().toString());
-                            statusCircle.setFill(Paint.valueOf(user.getStatus().getColor()));
-
-                            Tooltip tooltip = new Tooltip(user.getStatus().getDescription());
-                            Tooltip.install(hbox, tooltip);
-
-                            setGraphic(hbox);
-                        }
+                    Platform.runLater(() -> {
+                        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                        setGraphic(wrapper);
                     });
                 }
             };
@@ -212,48 +230,44 @@ public class ChatController implements Initializable {
         public ListCell<Message> call(ListView<Message> param) {
             return new ListCell<Message>() {
 
-                private final HBox wrapper = new HBox();
-                private final Label nameLabel = new Label();
-                private final Label msgLabel = new Label();
-
-                {
-                    nameLabel.setMaxWidth(Double.MAX_VALUE);
-                    nameLabel.setWrapText(true);
-                    nameLabel.setStyle("-fx-font-weight: bold;");
-
-                    msgLabel.setWrapText(true);
-                    msgLabel.setStyle(
-                        "-fx-background-color: #f4f4f4; -fx-background-radius: 10px; -fx-padding: 10px;");
-                }
 
                 @Override
-                protected void updateItem(Message msg, boolean empty) {
+                public void updateItem(Message msg, boolean empty) {
                     super.updateItem(msg, empty);
                     if (empty || Objects.isNull(msg)) {
                         setText(null);
                         setGraphic(null);
-                    } else {
-                        Platform.runLater(() -> {
-                            nameLabel.setText(msg.getSentBy().getName());
-                            msgLabel.setText(msg.getData());
-
-                            if (!wrapper.getChildren().contains(nameLabel) && !wrapper.getChildren()
-                                .contains(msgLabel)) {
-                                wrapper.getChildren().clear();
-
-                                if (user.equals(msg.getSentBy())) {
-                                    wrapper.setAlignment(Pos.TOP_RIGHT);
-                                    wrapper.getChildren().addAll(msgLabel, nameLabel);
-                                } else {
-                                    wrapper.setAlignment(Pos.TOP_LEFT);
-                                    wrapper.getChildren().addAll(nameLabel, msgLabel);
-                                }
-
-                                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                                setGraphic(wrapper);
-                            }
-                        });
+                        return;
                     }
+
+                    HBox wrapper = new HBox();
+                    Label nameLabel = new Label();
+                    Label msgLabel = new Label();
+
+                    {
+                        nameLabel.setMaxWidth(Double.MAX_VALUE);
+                        nameLabel.setWrapText(true);
+                        nameLabel.setStyle("-fx-font-weight: bold;");
+
+                        msgLabel.setWrapText(true);
+                        msgLabel.setStyle(
+                            "-fx-background-color: #f4f4f4; -fx-background-radius: 10px; -fx-padding: 10px;");
+                    }
+
+                    nameLabel.setText(msg.getSentBy().getName());
+                    msgLabel.setText(msg.getData());
+                    if (user.equals(msg.getSentBy())) {
+                        wrapper.setAlignment(Pos.TOP_RIGHT);
+                        wrapper.getChildren().addAll(msgLabel, nameLabel);
+                    } else {
+                        wrapper.setAlignment(Pos.TOP_LEFT);
+                        wrapper.getChildren().addAll(nameLabel, msgLabel);
+                    }
+
+                    Platform.runLater(() -> {
+                        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                        setGraphic(wrapper);
+                    });
                 }
             };
         }
@@ -273,6 +287,7 @@ public class ChatController implements Initializable {
             "You have successfully received a message from " + msg.getSendTo().getName() + ": "
                 + msg.getData());
         currentChatUser = msg.getSentBy();
+
         if (!chatUserList.getItems().contains(currentChatUser)) {
             chatUserList.getItems().add(currentChatUser);
             ArrayList<Message> chattingList = new ArrayList<>();
@@ -284,11 +299,79 @@ public class ChatController implements Initializable {
         chatContentList.setItems(chattingRecords);
     }
 
+    public void MessagePrompt(Message msg) {
+        Stage promptStage = new Stage();
+        promptStage.initModality(Modality.APPLICATION_MODAL);
+        promptStage.setTitle("Prompt");
+
+        Label label = new Label(
+            "Received message from " + msg.getSentBy() + ": ");
+        label.getStyleClass().add("label");
+        label.setStyle("-fx-font-size: 16px; -fx-text-fill: #333;");
+        Label message = new Label(msg.getData());
+        message.getStyleClass().add("label");
+        message.setStyle("-fx-font-size: 16px; -fx-text-fill: #333;");
+
+        Button okButton = new Button("OK");
+        okButton.setStyle(
+            "-fx-background-color: #fee1b8; -fx-text-fill: #fff; -fx-font-weight: bold;");
+        okButton.setOnAction(event -> promptStage.close());
+        okButton.setPrefWidth(52);
+        okButton.setPrefHeight(25);
+
+        VBox vbox = new VBox(10, label, message, okButton);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setPadding(new Insets(20));
+        vbox.setStyle(
+            "-fx-background-color: #fff; -fx-border-color: #fee1b8; -fx-border-width: 3px;");
+
+        Scene promptScene = new Scene(vbox, 300, 150);
+        promptStage.setScene(promptScene);
+
+        promptStage.initStyle(StageStyle.TRANSPARENT);
+        promptStage.setResizable(false);
+
+        promptStage.show();
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+            promptStage.close();
+        }));
+        timeline.play();
+    }
+
     public void ServerDownPrompt() {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Server Down");
-        alert.setHeaderText("The server has been shut down.");
-        alert.setContentText("Please try again later.");
-        alert.showAndWait();
+        Stage promptStage = new Stage();
+        promptStage.initModality(Modality.APPLICATION_MODAL);
+        promptStage.setTitle("Prompt");
+
+        Label label = new Label("The server has been shut down.");
+        label.getStyleClass().add("label");
+        label.setStyle("-fx-font-size: 16px; -fx-text-fill: #333;");
+
+        Button okButton = new Button("OK");
+        okButton.setStyle(
+            "-fx-background-color: #fee1b8; -fx-text-fill: #fff; -fx-font-weight: bold;");
+        okButton.setOnAction(event -> promptStage.close());
+        okButton.setPrefWidth(52);
+        okButton.setPrefHeight(25);
+
+        VBox vbox = new VBox(10, label, okButton);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setPadding(new Insets(20));
+        vbox.setStyle(
+            "-fx-background-color: #fff; -fx-border-color: #fee1b8; -fx-border-width: 3px;");
+
+        Scene promptScene = new Scene(vbox, 300, 150);
+        promptStage.setScene(promptScene);
+
+        promptStage.initStyle(StageStyle.TRANSPARENT);
+        promptStage.setResizable(false);
+
+        promptStage.show();
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+            promptStage.close();
+        }));
+        timeline.play();
     }
 }

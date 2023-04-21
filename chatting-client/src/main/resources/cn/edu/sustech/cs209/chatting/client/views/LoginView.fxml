@@ -9,71 +9,62 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane fx:id="Login" prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8"
-  xmlns:fx="http://javafx.com/fxml/1"
-  fx:controller="cn.edu.sustech.cs209.chatting.client.LoginController">
+<Pane fx:id="Login" prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.edu.sustech.cs209.chatting.client.LoginController">
   <children>
-    <ImageView fitHeight="313.0" fitWidth="400.0" layoutX="50.0" layoutY="-31.0" pickOnBounds="true"
-      preserveRatio="true">
+    <ImageView fitHeight="313.0" fitWidth="400.0" layoutX="50.0" layoutY="-31.0" pickOnBounds="true" preserveRatio="true">
       <image>
-        <Image url="@../images/LOGO.png"/>
+        <Image url="@../images/LOGO.png" />
       </image>
     </ImageView>
 
-    <TextField fx:id="UserName" layoutX="125.0" layoutY="190.0" prefHeight="40.0" prefWidth="250.0"
-      promptText="Identification">
+    <TextField fx:id="UserName" layoutX="125.0" layoutY="190.0" prefHeight="40.0" prefWidth="250.0" promptText="Identification">
       <font>
-        <Font name="SimSun" size="15.0"/>
+        <Font name="SimSun" size="15.0" />
       </font>
-      <effect>
-        <InnerShadow blurType="GAUSSIAN" color="#a19f9fa1" height="11.22" radius="4.9725"
-          width="10.67"/>
-      </effect>
       <padding>
-        <Insets left="30.0"/>
+        <Insets left="30.0" />
       </padding>
     </TextField>
-    <PasswordField fx:id="Password" layoutX="125.0" layoutY="240.0" prefHeight="40.0"
-      prefWidth="250.0" promptText="Password">
+    <PasswordField fx:id="Password" layoutX="125.0" layoutY="240.0" prefHeight="40.0" prefWidth="250.0" promptText="Password">
       <font>
-        <Font name="SimSun" size="15.0"/>
+        <Font name="SimSun" size="15.0" />
       </font>
-      <effect>
-        <InnerShadow color="#aba7a7a4" height="11.34" radius="5.2524999999999995" width="11.67"/>
-      </effect>
       <padding>
-        <Insets left="30.0"/>
+        <Insets left="30.0" />
       </padding>
     </PasswordField>
-    <Button layoutX="125.0" layoutY="292.0" mnemonicParsing="false" onAction="#loginButtonAction"
-      prefHeight="30.0" prefWidth="250.0" style="-fx-background-color: #fee1b8" text="登录"
-      textFill="WHITE">
+    <Button layoutX="125.0" layoutY="292.0" mnemonicParsing="false" onAction="#loginButtonAction" prefHeight="30.0" prefWidth="250.0" style="-fx-background-color: #fee1b8" text="登录" textFill="WHITE">
       <effect>
-        <DropShadow color="#000000a1" height="11.0" radius="5.0" width="11.0"/>
+        <DropShadow color="#000000a1" height="11.0" radius="5.0" width="11.0" />
       </effect>
       <font>
-        <Font name="System Bold" size="14.0"/>
+        <Font name="System Bold" size="14.0" />
       </font>
     </Button>
-    <ImageView fitHeight="23.0" fitWidth="24.0" layoutX="129.0" layoutY="199.0" pickOnBounds="true"
-      preserveRatio="true">
+    <ImageView fitHeight="23.0" fitWidth="24.0" layoutX="129.0" layoutY="199.0" pickOnBounds="true" preserveRatio="true">
       <image>
-        <Image url="@../images/user.png"/>
+        <Image url="@../images/user.png" />
       </image>
     </ImageView>
-    <ImageView fitHeight="23.0" fitWidth="24.0" layoutX="129.0" layoutY="249.0" pickOnBounds="true"
-      preserveRatio="true">
+    <ImageView fitHeight="23.0" fitWidth="24.0" layoutX="129.0" layoutY="249.0" pickOnBounds="true" preserveRatio="true">
       <image>
-        <Image url="@../images/password.png"/>
+        <Image url="@../images/password.png" />
       </image>
     </ImageView>
-    <Button layoutY="324.0" mnemonicParsing="false"
-      onAction="#showRegisterView"
-      style="-fx-background-color: transparent; -fx-border-color: transparent;" text="注册账号"
-      textAlignment="CENTER" textFill="#838b8b">
+    <Button layoutY="324.0" mnemonicParsing="false" onAction="#showRegisterView" style="-fx-background-color: transparent; -fx-border-color: transparent;" text="注册账号" textAlignment="CENTER" textFill="#838b8b">
       <font>
-        <Font size="12.0"/>
+        <Font size="12.0" />
       </font>
     </Button>
+    <TextField fx:id="HostName" alignment="CENTER" layoutX="405.0" layoutY="328.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="54.0" text="127.0.0.1">
+      <font>
+        <Font name="Arial Bold" size="9.0" />
+      </font>
+    </TextField>
+    <TextField fx:id="Port" alignment="CENTER" layoutX="465.0" layoutY="328.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="35.0" text="1207">
+      <font>
+        <Font name="Arial Bold" size="9.0" />
+      </font>
+    </TextField>
   </children>
 </Pane>

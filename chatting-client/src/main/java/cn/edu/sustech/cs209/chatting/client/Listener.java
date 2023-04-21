@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 
 
 public class Listener implements Runnable {
@@ -45,20 +46,24 @@ public class Listener implements Runnable {
 
             connect();
 
-            chatController.onlineUserList = (List<User>) input.readObject();
-
             while (socket.isConnected()) {
                 Object o;
                 o = input.readObject();
                 if (o != null) {
                     if (o instanceof List) {
-                        chatController.onlineUserList = (List<User>) o;
+                        Platform.runLater(() -> {
+                            chatController.onlineUserList.setItems(
+                                FXCollections.observableArrayList((List<User>) o));
+                        });
                     } else if (o instanceof Message) {
                         Message message = (Message) o;
                         if (message.getSentBy().equals(user)) {
                             chatController.addToChatContentListForBy(message);
                         } else if (message.getSendTo().equals(user)) {
                             chatController.addToChatContentListForTo(message);
+                            Platform.runLater(() -> {
+                                chatController.MessagePrompt(message);
+                            });
                         }
                     }
                 }
