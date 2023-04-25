@@ -56,14 +56,14 @@
         <Font size="12.0" />
       </font>
     </Button>
-    <TextField fx:id="HostName" alignment="CENTER" layoutX="405.0" layoutY="328.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="54.0" text="127.0.0.1">
+    <TextField fx:id="HostName" alignment="CENTER" layoutX="403.0" layoutY="328.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="54.0" text="127.0.0.1">
       <font>
-        <Font name="Arial Bold" size="9.0" />
+        <Font name="Segoe UI Bold" size="10.0" />
       </font>
     </TextField>
-    <TextField fx:id="Port" alignment="CENTER" layoutX="465.0" layoutY="328.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="35.0" text="1207">
+    <TextField fx:id="Port" alignment="CENTER" layoutX="464.0" layoutY="328.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="36.0" text="1207">
       <font>
-        <Font name="Arial Bold" size="9.0" />
+        <Font name="Segoe UI Bold" size="10.0" />
       </font>
     </TextField>
   </children>

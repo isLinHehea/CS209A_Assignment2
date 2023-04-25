@@ -2,11 +2,14 @@ package cn.edu.sustech.cs209.chatting.common;
 
 import java.io.Serializable;
 
+/**
+ * .
+ */
 public class User implements Serializable {
 
     private static final long serialVersionUID = -853434091929591296L;
-    private String name;
-    private String password;
+    private final String name;
+    private final String password;
 
     private Status status;
 
@@ -26,7 +29,9 @@ public class User implements Serializable {
         return name.equals(user.name);
     }
 
-
+    /**
+     * .
+     */
     public User(String name, String password, Status status) {
         this.name = name;
         this.password = password;

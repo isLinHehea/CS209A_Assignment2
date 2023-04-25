@@ -78,7 +78,7 @@
                 </Button>
                 <Button layoutX="72.0" maxHeight="-Infinity" maxWidth="-Infinity"
                   minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                  prefHeight="25.0" prefWidth="25.0"
+                  prefHeight="25.0" prefWidth="25.0" onAction="#sendFile"
                   style="-fx-border-color: transparent;-fx-border-width: 0;-fx-background-radius: 0;-fx-background-color: transparent;">
                   <graphic>
                     <ImageView fitHeight="25.0" fitWidth="25.0" mouseTransparent="true"

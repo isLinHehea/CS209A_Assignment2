@@ -1,5 +1,8 @@
 package cn.edu.sustech.cs209.chatting.common;
 
+/**
+ * .
+ */
 public enum Status {
     ONLINE("Green", "Online"),
     AWAY("Orange", "Away");
@@ -15,9 +18,4 @@ public enum Status {
     public String getColor() {
         return color;
     }
-
-    public String getDescription() {
-        return description;
-    }
-
 }

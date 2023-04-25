@@ -16,8 +16,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -28,7 +26,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -38,7 +35,9 @@ import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+/**
+ * .
+ */
 public class LoginController implements Initializable {
 
     @FXML
@@ -59,8 +58,6 @@ public class LoginController implements Initializable {
     private PasswordField Password;
     private Scene scene;
     private static LoginController instance;
-
-    private Connection conn = null;
     private Statement stmt = null;
 
     Logger logger = LoggerFactory.getLogger(LoginController.class);
@@ -75,6 +72,9 @@ public class LoginController implements Initializable {
         return instance;
     }
 
+    /**
+     * .
+     */
     public void loginButtonAction() throws IOException, SQLException {
         String username = UserName.getText();
         String password = Password.getText();
@@ -96,9 +96,7 @@ public class LoginController implements Initializable {
             User user = new User(username, password, ONLINE);
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/ChatView.fxml"));
             this.scene = new Scene(fxmlLoader.load());
-
             ChatController chatController = fxmlLoader.getController();
-
             Listener listener = new Listener(HostName.getText(), Integer.parseInt(Port.getText()),
                 user, chatController);
             Thread x = new Thread(listener);
@@ -106,7 +104,10 @@ public class LoginController implements Initializable {
         }
     }
 
-    public void registerButtonAction() throws SQLException, IOException {
+    /**
+     * .
+     */
+    public void registerButtonAction() throws SQLException {
         String username = RegisterUserName.getText();
         String password = RegisterPassword.getText();
         String sql =
@@ -129,20 +130,20 @@ public class LoginController implements Initializable {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setContentText("Successfully register~");
             Button btnOk = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
-            btnOk.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    try {
-                        returnLoginButtonAction();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+            btnOk.setOnAction(event -> {
+                try {
+                    returnLoginButtonAction();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             });
             alert.show();
         }
     }
 
+    /**
+     * .
+     */
     public void returnLoginButtonAction() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/LoginView.fxml"));
         Pane = Login;
@@ -156,10 +157,27 @@ public class LoginController implements Initializable {
             stage.setScene(this.scene);
             stage.show();
         });
-
     }
 
-    //
+    /**
+     * .
+     */
+    public void showScene() throws IOException {
+        Platform.runLater(() -> {
+            Stage stage = (Stage) UserName.getScene().getWindow();
+            stage.setOnCloseRequest((WindowEvent e) -> {
+                Platform.exit();
+                System.exit(0);
+            });
+            stage.setScene(this.scene);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+        });
+    }
+
+    /**
+     * .
+     */
     public void showRegisterView() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("views/RegisterView.fxml"));
         Pane = Register;
@@ -175,21 +193,6 @@ public class LoginController implements Initializable {
         });
     }
 
-    public void showScene() throws IOException {
-        Platform.runLater(() -> {
-            Stage stage = (Stage) UserName.getScene().getWindow();
-            stage.setOnCloseRequest((WindowEvent e) -> {
-                Platform.exit();
-                System.exit(0);
-            });
-            stage.setScene(this.scene);
-            stage.setMinWidth(700);
-            stage.setMinHeight(500);
-            stage.setResizable(true);
-            stage.centerOnScreen();
-        });
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (Login == null) {
@@ -200,7 +203,7 @@ public class LoginController implements Initializable {
         animation(Pane);
         try {
             Class.forName("org.postgresql.Driver");
-            conn = DriverManager
+            Connection conn = DriverManager
                 .getConnection("jdbc:postgresql://localhost:5432/postgres",
                     "postgres", "123456");
             stmt = conn.createStatement();
@@ -210,6 +213,9 @@ public class LoginController implements Initializable {
         logger.info("Open database successfully!");
     }
 
+    /**
+     * .
+     */
     public void animation(Pane pane) {
         int numberOfSquares = 52;
         while (numberOfSquares > 0) {
@@ -218,56 +224,62 @@ public class LoginController implements Initializable {
         }
     }
 
+    /**
+     * .
+     */
     public void generateAnimation(Pane pane) {
         Random rand = new Random();
         int sizeOfSqaure = rand.nextInt(50) + 1;
-        int speedOfSqaure = rand.nextInt(10) + 5;
-        int startXPoint = rand.nextInt(500);
-        int startYPoint = rand.nextInt(350);
+        int startX = rand.nextInt(500);
+        int startY = rand.nextInt(350);
         int direction = rand.nextInt(5) + 1;
 
-        KeyValue moveXAxis = null;
-        KeyValue moveYAxis = null;
+        KeyValue moveX = null;
+        KeyValue moveY = null;
         Rectangle r1 = null;
 
         switch (direction) {
-            case 1:
+            case 1 -> {
                 // MOVE LEFT TO RIGHT
-                r1 = new Rectangle(0, startYPoint, sizeOfSqaure, sizeOfSqaure);
-                moveXAxis = new KeyValue(r1.xProperty(), 350 - sizeOfSqaure);
-                break;
-            case 2:
+                r1 = new Rectangle(0, startY, sizeOfSqaure, sizeOfSqaure);
+                moveX = new KeyValue(r1.xProperty(), 350 - sizeOfSqaure);
+            }
+            case 2 -> {
                 // MOVE TOP TO BOTTOM
-                r1 = new Rectangle(startXPoint, 0, sizeOfSqaure, sizeOfSqaure);
-                moveYAxis = new KeyValue(r1.yProperty(), 420 - sizeOfSqaure);
-                break;
-            case 3:
+                r1 = new Rectangle(startX, 0, sizeOfSqaure, sizeOfSqaure);
+                moveY = new KeyValue(r1.yProperty(), 420 - sizeOfSqaure);
+            }
+            case 3 -> {
                 //MOVE RIGHT TO LEFT, BOTTOM TO TOP
                 // MOVE LEFT TO RIGHT, TOP TO BOTTOM
-                r1 = new Rectangle(startXPoint, 0, sizeOfSqaure, sizeOfSqaure);
-                moveXAxis = new KeyValue(r1.xProperty(), 350 - sizeOfSqaure);
-                moveYAxis = new KeyValue(r1.yProperty(), 420 - sizeOfSqaure);
-                break;
-            case 4:
+                r1 = new Rectangle(startX, 0, sizeOfSqaure, sizeOfSqaure);
+                moveX = new KeyValue(r1.xProperty(), 350 - sizeOfSqaure);
+                moveY = new KeyValue(r1.yProperty(), 420 - sizeOfSqaure);
+            }
+            case 4 -> {
                 // MOVE BOTTOM TO TOP
-                r1 = new Rectangle(startXPoint, 420 - sizeOfSqaure, sizeOfSqaure, sizeOfSqaure);
-                moveYAxis = new KeyValue(r1.xProperty(), 0);
-                break;
-            case 5:
+                r1 = new Rectangle(startX, 420 - sizeOfSqaure, sizeOfSqaure, sizeOfSqaure);
+                moveY = new KeyValue(r1.xProperty(), 0);
+            }
+            case 5 -> {
                 // MOVE RIGHT TO LEFT
-                r1 = new Rectangle(420 - sizeOfSqaure, startYPoint, sizeOfSqaure, sizeOfSqaure);
-                moveXAxis = new KeyValue(r1.xProperty(), 0);
-                break;
-
-            default:
-                System.out.println("default");
+                r1 = new Rectangle(420 - sizeOfSqaure, startY, sizeOfSqaure, sizeOfSqaure);
+                moveX = new KeyValue(r1.xProperty(), 0);
+            }
+            default -> System.out.println("default");
         }
 
-        r1.setFill(Color.web("#F89406"));
+        if (pane.equals(Login)) {
+            r1.setFill(Color.web("#F89406"));
+        } else {
+            r1.setFill(Color.web("#069df8"));
+        }
         r1.setOpacity(0.1);
 
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(speedOfSqaure * 1000), moveXAxis,
-            moveYAxis);
+        int speedOfSqaure = rand.nextInt(10) + 5;
+
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(speedOfSqaure * 1000), moveX,
+            moveY);
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.setAutoReverse(true);
