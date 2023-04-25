@@ -47,8 +47,8 @@ public class Server {
     public static void main(String[] args) {
         logger.info("The SUSTech Chatting Server is running.");
 
-        onlineUserList.add(new User("TESTA", "1234567", Status.ONLINE));
-        onlineUserList.add(new User("TESTB", "1234567", Status.ONLINE));
+//        onlineUserList.add(new User("TESTA", "1234567", Status.ONLINE));
+//        onlineUserList.add(new User("TESTB", "1234567", Status.ONLINE));
 
         try (ServerSocket listener = new ServerSocket(PORT)) {
             while (true) {
