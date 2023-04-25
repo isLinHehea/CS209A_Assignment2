@@ -236,6 +236,8 @@ public class Listener implements Runnable {
 
         TextArea fileName = new TextArea();
         fileName.setPromptText("File Name");
+        fileName.setPrefColumnCount(100);
+        fileName.setPrefRowCount(30);
 
         Button selectFolderButton = new Button("Select Folder");
         selectFolderButton.setStyle(
@@ -286,8 +288,8 @@ public class Listener implements Runnable {
             new Thread(task).start();
             promptStage.close();
         }));
-        selectFolderButton.setPrefWidth(52);
-        selectFolderButton.setPrefHeight(25);
+        selectFolderButton.setPrefWidth(120);
+        selectFolderButton.setPrefHeight(35);
 
         VBox vbox = new VBox(10, label, fileName, selectFolderButton);
         vbox.setAlignment(Pos.CENTER);
